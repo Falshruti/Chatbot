@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables (contains API keys - NEVER commit this)
+.env
+
+# User data (local auth store - contains hashed passwords)
+users.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test/temp files
+test_*.js
+sample.pdf
+download.js
+_test_session.txt
