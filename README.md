@@ -8,6 +8,16 @@ A **premium, full-featured AI chatbot** powered by Google Gemini, built with Nod
 
 ---
 
+## 📸 Screenshots
+
+### 🔐 Login Page
+![Login Page](screenshots/chatbot_login.png)
+
+### 💬 Chat Interface
+![Chat Interface](screenshots/chatbot_ui.png)
+
+---
+
 ## ✨ Features
 
 - **🤖 Gemini AI Chat** — Powered by Google Gemini 2.5 Flash with automatic model fallback
@@ -72,6 +82,7 @@ company-chatbot/
 ├── login.html         # Login/Signup page
 ├── package.json       # Node.js dependencies
 ├── .env               # Environment variables (not committed)
+├── screenshots/       # Project UI screenshots
 ├── .gitignore
 └── README.md
 ```
