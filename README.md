@@ -69,7 +69,7 @@ SESSION_SECRET=your_random_secret_here
 node server.js
 ```
 
-Then open **http://localhost:3001** in your browser.
+Then open **[http://localhost:3001](https://chatbot-alpha-olive-40.vercel.app/)** in your browser.
 
 ---
 
