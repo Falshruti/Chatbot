@@ -9,7 +9,7 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const multer = require("multer");
-const { PDFParse } = require("pdf-parse");
+const pdfParse = require("pdf-parse");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // ─── User Store (local JSON file or /tmp fallback on Vercel) ─────────────────
@@ -297,8 +297,7 @@ app.post("/upload", requireAuth, upload.single("file"), async (req, res) => {
       console.log(`Processing PDF: ${originalname} (${buffer.length} bytes)`);
       let pdfText = "";
       try {
-        const parser = new PDFParse({ data: buffer });
-        const parsed = await parser.getText();
+        const parsed = await pdfParse(buffer);
         pdfText = parsed.text.trim();
       } catch (pdfErr) {
         console.error("PDF parse error:", pdfErr.message);
