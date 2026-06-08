@@ -12,19 +12,33 @@ const multer = require("multer");
 const { PDFParse } = require("pdf-parse");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// ─── User Store (local JSON file) ───────────────────────────────────────────
-const USERS_FILE = path.join(__dirname, "users.json");
+// ─── User Store (local JSON file or /tmp fallback on Vercel) ─────────────────
+const USERS_FILE = process.env.VERCEL
+  ? path.join("/tmp", "users.json")
+  : path.join(__dirname, "users.json");
 
 function readUsers() {
   try {
+    // If running on Vercel, copy the bundled users.json to /tmp if not already initialized
+    if (process.env.VERCEL && !fs.existsSync(USERS_FILE)) {
+      const bundledPath = path.join(__dirname, "users.json");
+      if (fs.existsSync(bundledPath)) {
+        fs.copyFileSync(bundledPath, USERS_FILE);
+      }
+    }
     return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
-  } catch {
+  } catch (err) {
+    console.error("Error reading users:", err);
     return [];
   }
 }
 
 function writeUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  } catch (err) {
+    console.error("Error writing users:", err);
+  }
 }
 
 // ─── Gemini Model Fallback List ──────────────────────────────────────────────
@@ -466,8 +480,12 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message || "Something went wrong." });
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Chatbot server running on http://localhost:${PORT}`);
-  console.log(`Login page: http://localhost:${PORT}/login`);
-});
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Chatbot server running on http://localhost:${PORT}`);
+    console.log(`Login page: http://localhost:${PORT}/login`);
+  });
+}
+
+module.exports = app;
